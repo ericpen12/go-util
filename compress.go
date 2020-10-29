@@ -9,11 +9,26 @@ import (
 	"path"
 )
 
-func Compress(dir string) (io.Reader, error) {
+func CompressFile(path, outPath string) error {
+	byt, err := CompressBytes(path)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(outPath, byt, 0700)
+}
+
+func CompressBytes(path string) ([]byte, error) {
+	reader, err := CompressReader(path)
+	if err != nil {
+		return nil, err
+	}
+	return ioutil.ReadAll(reader)
+}
+
+func CompressReader(dir string) (io.Reader, error) {
 	buf := bytes.NewBuffer(nil)
 	w := zip.NewWriter(buf)
 	defer w.Close()
-
 	f, err := os.Stat(dir)
 	if err != nil {
 		return nil, err
