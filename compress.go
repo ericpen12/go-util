@@ -20,7 +20,7 @@ func Compress(dir string) (io.Reader, error) {
 	}
 
 	if !f.IsDir() {
-		if err := write(w, dir, ""); err != nil {
+		if err := write(w, dir, path.Base(dir)); err != nil {
 			return nil, err
 		}
 	} else {
